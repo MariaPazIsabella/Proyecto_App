@@ -111,22 +111,21 @@ const AccessForm = (props) => {
 
     return (
         <View style={styles.containerGeneral}>
-            <ScrollView>
             <StatusBar backgroundColor="black" />
             <View style={styles.containerBarra}>
                 <Image
                     source={require('../assets/logo_SS.png')}
                     style={styles.logoBarra}
                 />
-                <Text style={styles.tituloBarra}>Servicio de Salud - Biobio</Text>
+                <Text style={styles.tituloBarra}>SS - Biobio</Text>
+                <TouchableOpacity style={styles.volver} onPress={handleVolver}>
+                    <Icon name="arrow-back" size={24} color={'#fff'} />
+                </TouchableOpacity>
             </View>
+            <ScrollView>
             <Text style={{ fontSize: 20, color: "black", fontWeight: 'bold', alignSelf: 'center', marginTop: 15,}}>Registrar Nuevo Usuario</Text>
             <View style={styles.container}>
 
-                <TouchableOpacity style={{marginTop:10,}} onPress={handleVolver}>
-                    <Icon name="arrow-back" size={24} color={COLORS.dark} />
-                </TouchableOpacity>
-            
                 <Text style={styles.subTitulo}>Primer Nombre (*)</Text>
                 <TextInput
                     value={primerNombre}
@@ -230,11 +229,12 @@ const styles = StyleSheet.create({
     },
     container: {
         paddingHorizontal: 30,
+        marginBottom:'10%',
         /* alignItems: 'center', */
     },
     containerBarra: {
         width: 500,
-        height: 150,
+        height: 70,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#rgb(39, 40, 91)',
@@ -244,6 +244,9 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         marginRight: 10,
+    },
+    volver:{
+        marginLeft:'25%'
     },
     tituloBarra: {
         fontSize: 20,

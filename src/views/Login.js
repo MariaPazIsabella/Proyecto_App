@@ -8,9 +8,6 @@ import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../consts/firebase';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 
-import BottomNavigatorAdmin from './navigation/BottomNavigationAdmin';
-import BottomNavigatorUsuario from './navigation/BottomNavigatorUsuario';
-
 const Login = (props) => {
 
     const [email, setEmail] = React.useState('');
@@ -36,47 +33,52 @@ const Login = (props) => {
 
     const handleSignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-            console.log('Signed in');
-            const user = userCredential.user;
-            console.log(user);
-            
-            //colocar que ingresen con cuenta de google
-            //leer database de usuarios con acceso autorizado y comprobar si el correo esta,
-            //al estar obtener su rol y mostrar su navegador correspondiente,
-            //de no estar mostrarle la ventana de AccessForm
+            .then((userCredential) => {
+                console.log('Signed in');
+                const user = userCredential.user;
+                console.log(user);
+
+                //colocar que ingresen con cuenta de google
+                //leer database de usuarios con acceso autorizado y comprobar si el correo esta,
+                //al estar obtener su rol y mostrar su navegador correspondiente,
+                //de no estar mostrarle la ventana de AccessForm
 
 
-            // Obtener el dominio del correo electrónico
-            const domain = email.split('@')[1];
-      
-            // Realizar la redirección según el dominio del correo electrónico
-            if (domain === 'oper.cl') {
-                navigation.navigate('HomeOperador');
-            } else if (domain === 'user.cl') {
-              navigation.navigate('HomeUsuario');
-            } else if (domain === 'admin.cl') {
-              // Mostrar un texto en lugar de una ventana específica
-              navigation.navigate('HomeAdmin');
-              
-            } else {
-                navigation.navigate('AccessForm');
-              console.log('Correo electrónico no válido');
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      };
+                // Obtener el dominio del correo electrónico
+                const domain = email.split('@')[1];
+
+                // Realizar la redirección según el dominio del correo electrónico
+                if (domain === 'oper.cl') {
+                    navigation.navigate('HomeOperador');
+                } else if (domain === 'user.cl') {
+                    navigation.navigate('HomeUsuario');
+                } else if (domain === 'admin.cl') {
+                    // Mostrar un texto en lugar de una ventana específica
+                    navigation.navigate('HomeAdmin');
+
+                } else {
+                    navigation.navigate('AccessForm');
+                    console.log('Correo electrónico no válido');
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
     return (
 
         <View style={style.container}>
             <StatusBar backgroundColor="black" />
-            <Image source={require('../assets/Login-Fondo.jpg')} style={[style.image, StyleSheet.absoluteFill]} />
+            <Image source={require('../assets/Fondo3.jpg')} style={[style.image, StyleSheet.absoluteFill]} />
+            <View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ width: '45%', height: 30, backgroundColor: '#0f69b4' }} />
+                    <View style={{ width: '55%', height: 30, backgroundColor: '#e22c2c' }} />
+                </View>
+            </View>
 
-
-            <ScrollView contentContainerStyle={{ flex: 1, width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                <BlurView intensity={200} >
+            <ScrollView contentContainerStyle={{ flex: 1, width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', borderRadius:10 }}>
+                <BlurView intensity={140} >
                     <View style={style.login}>
                         <Image source={require('../assets/logo_SS.png')} style={[style.image, style.imglogo]} />
                         <View>
@@ -87,11 +89,11 @@ const Login = (props) => {
                             <Text style={style.text}>Password</Text>
                             <TextInput onChangeText={(text) => setPassword(text)} style={style.input} placeholder='Password' secureTextEntry={true} />
                         </View>
-                        <TouchableOpacity onPress={handleSignIn} style={[style.button, { backgroundColor: '#00cfeb90', borderRadius: 10 }]}>
-                            <Text style={style.text}>Login</Text>
+                        <TouchableOpacity onPress={handleSignIn} style={[style.button, { backgroundColor: '#0f69b4', borderRadius: 10 }]}>
+                            <Text style={style.text2}>Login</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => props.navigation.navigate('AccessForm')} style={[style.button, { backgroundColor: '#6792f090', borderRadius: 10 }]}>
-                            <Text style={style.text}>Solicitar Acceso</Text>
+                        <TouchableOpacity onPress={() => props.navigation.navigate('AccessForm')} style={[style.button, { backgroundColor: '#rgb(39, 40, 91)', borderRadius: 10 }]}>
+                            <Text style={style.text2}>Solicitar Acceso</Text>
                         </TouchableOpacity>
                     </View>
                 </BlurView>
@@ -103,7 +105,7 @@ const Login = (props) => {
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#ffff',
+        backgroundColor: '#rgb(39, 40, 91)',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -116,7 +118,7 @@ const style = StyleSheet.create({
     login: {
         width: 350,
         height: 500,
-        borderColor: 'white',
+        borderColor: '#rgb(39, 40, 91)',
         borderWidth: 2,
         borderRadius: 10,
         padding: 10,
@@ -125,14 +127,18 @@ const style = StyleSheet.create({
     imglogo: {
         width: 100,
         height: 100,
-        borderColor: '#fff',
-        borderWidth: 1,
+        borderColor: '#rgb(39, 40, 91)',
         marginVertical: 30,
     },
     text: {
         fontSize: 17,
         fontWeight: '400',
-        color: 'white',
+        color: '#rgb(39, 40, 91)',
+    },
+    text2: {
+        fontSize: 17,
+        fontWeight: '400',
+        color: '#fff',
     },
     input: {
         width: 250,
@@ -140,9 +146,10 @@ const style = StyleSheet.create({
         borderColor: '#fff',
         borderWidth: 2,
         borderRadius: 10,
+        color:'#fff',
         padding: 10,
         paddingVertical: 10,
-        backgroundColor: '#ffffff90',
+        backgroundColor: '#0f69b490',
         marginBottom: 20,
     },
     button: {
@@ -152,8 +159,8 @@ const style = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 10,
-        borderColor: 'white',
-        borderWidth: 1,
+        borderColor: '#fff',
+        borderWidth: 2,
     },
 });
 
