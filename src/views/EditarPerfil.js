@@ -48,7 +48,6 @@ const EditarPerfil = () => {
           genero: genero,
           rutAfectado: rutValido,
           fechaNacimiento: fecha,
-          edad: edad,
           telefonoAfectado: telefono,
           correo: correo,
           domicilio: domicilio,
@@ -65,7 +64,6 @@ const EditarPerfil = () => {
           genero: genero,
           rutAfectado: rutValido,
           fechaNacimiento: fecha,
-          edad: edad,
           telefonoAfectado: telefono,
           correo: correo,
           domicilio: domicilio,
@@ -114,7 +112,6 @@ const EditarPerfil = () => {
   const [rutValido, setRutValido] = useState(''); //rut valido es el que se envia, no tiene dv
   const [fecha, setFecha] = useState('');
   const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false);
-  const [edad, setEdad] = useState('');
   const [telefono, setTelefono] = useState('');
   const [correo, setCorreo] = useState('');
   const [domicilio, setDomicilio] = useState('');
@@ -127,32 +124,7 @@ const EditarPerfil = () => {
     setTexto(textoLimpio);
   };
 
-  //--------------------------------------------------FECHA-----------------------------------------
-
-  function calcularEdad(fecha) {
-    const partesFecha = fecha.split('-');
-    const dia = parseInt(partesFecha[0], 10);
-    const mes = parseInt(partesFecha[1], 10);
-    const anio = parseInt(partesFecha[2], 10);
-
-    const fechaActual = new Date();
-    const diaActual = fechaActual.getDate();
-    const mesActual = fechaActual.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
-    const anioActual = fechaActual.getFullYear();
-
-    let edad = anioActual - anio;
-
-    // Restar un año si el mes actual es anterior al mes de nacimiento
-    if (mesActual < mes) {
-      edad--;
-    }
-    // Restar un año si el mes actual es igual al mes de nacimiento pero el día actual es anterior al día de nacimiento
-    else if (mesActual === mes && diaActual < dia) {
-      edad--;
-    }
-
-    return edad;
-  }
+  
   //--------------------------------------------------NUMERO-----------------------------------------
   const clearNum = (text) => {
     const cleaned = text.replace(/[^0-9]/g, '');

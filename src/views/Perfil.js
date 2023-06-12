@@ -17,12 +17,10 @@ const Perfil = (props) => {
   const [genero, setGenero] = useState('');
   const [rut, setRut] = useState('');
   const [date, setDate] = useState('');
-  const [edad, setEdad] = useState('');
   const [telefono, setTelefono] = useState('');
   const [correo, setCorreo] = useState('');
   const [domicilio, setDomicilio] = useState('');
   const [mutual, setMutual] = useState('');
-  const [estamento, setEstamento] = useState('');
   const [tipoEstamento, setTipoEstamento] = useState('');
 
   useEffect(() => {
@@ -40,12 +38,10 @@ const Perfil = (props) => {
           setGenero(doc.data().genero);
           setRut(doc.data().rutAfectado);
           setDate(doc.data().fechaNacimiento);
-          setEdad(doc.data().edad);
           setTelefono(doc.data().telefonoAfectado);
           setCorreo(doc.data().correo);
           setDomicilio(doc.data().domicilio);
           setMutual(doc.data().mutualidad);
-          setEstamento(doc.data().estamentoAfectado);
           setTipoEstamento(doc.data().tipoEstamento);
           console.log();
         });
@@ -78,7 +74,6 @@ const Perfil = (props) => {
         <Text style={styles.subTitulo}>Genero: {genero}</Text>
         <Text style={styles.subTitulo}>Rut: {rut}</Text>
         <Text style={styles.subTitulo}>Fecha nacimiento: {date}</Text>
-        <Text style={styles.subTitulo}>Edad: {edad}</Text>
         <Text style={styles.subTitulo}>Telefono: {telefono}</Text>
         <Text style={styles.subTitulo}>Correo: {correo}</Text>
         <Text style={styles.subTitulo}>Domicilio: {domicilio}</Text>

@@ -15,6 +15,9 @@ import dataTipoEstablecimiento from '../consts/dataTipoEstablecimiento'
 import COLORS from '../consts/colors';
 import { PrimaryButton } from './components/Button';
 
+
+// agregar funcion para obtener la edad
+
 const Formulario = (navigation) => {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -181,6 +184,7 @@ const Formulario = (navigation) => {
   const [rutTestigo1Valido, setRutTestigo1Valido] = useState('');
   const [telefonoTestigo1, setTelefonoTestigo1] = useState('');
   // TESTIGO 2
+  const [agregartestigo, setAgregartestigo] = useState('false');
   const [primerNombreTestigo2, setPrimerNombreTestigo2] = useState('');
   const [segundoNombreTestigo2, setSegundoNombreTestigo2] = useState('');
   const [primerApellidoTestigo2, setPrimerApellidoTestigo2] = useState('');
