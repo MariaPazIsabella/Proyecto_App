@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 import { useState, useEffect } from 'react';
-import { StyleSheet,TimePickerAndroid, Text, View, TextInput, Image, StatusBar, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, TimePickerAndroid, Text, View, TextInput, Image, StatusBar, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { FIRESTORE_DB } from '../consts/firebase';
 import { collection, addDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
@@ -17,14 +17,16 @@ import { PrimaryButton } from './components/Button';
 
 
 // agregar funcion para obtener la edad
+// que solo guarde la fecha y la hora 
 
-const Formulario = (navigation) => {
+
+const Formulario = (props) => {
   const [isEditing, setIsEditing] = useState(false);
 
-   useEffect(() => {
+  useEffect(() => {
     obtenerUid();
     cargarDatosPerfil();
-  }, []); 
+  }, []);
   const datosObligatorios = async () => {
     if (!tipoAgresion || !fecha || !hora || !nombreComuna || !nombreTipo || !establecimientoId || !unidad || !tipoAgresor || !primerNombreTestigo1 || !segundoApellidoTestigo1 || !segundoNombreTestigo1 || !primerApellidoTestigo1 || !rutTestigo1 || !telefonoTestigo1 || !descripcion) {
       Alert.alert('Faltan datos', 'Por favor complete los campos obligatorios');
@@ -40,8 +42,8 @@ const Formulario = (navigation) => {
       addDoc(collection(FIRESTORE_DB, 'ReportsUploaded'), {
         uid: uid,
         tipoAgresion: tipoAgresion,
-        fecha: fecha,
-        hora: tiempo,
+        fecha: fecha.toISOString().slice(0, 10),
+        hora: '20:20',//hora
         nombreComuna: nombreComuna,
         nombreTipo: nombreTipo,
         establecimientoId: establecimientoId,
@@ -117,7 +119,7 @@ const Formulario = (navigation) => {
       toggleEditing();
     }
   };
-  
+
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
@@ -138,8 +140,11 @@ const Formulario = (navigation) => {
   const [tipoAgresion, setTipoAgresion] = useState('');
   //II.	ANTECEDENTES DE LA AGRESIÓN
   const [fecha, setFecha] = useState(new Date());
+  const [fecha1, setFecha1] = useState('');
+
   const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false);
   const [hora, setHora] = useState(new Date());
+  const [hora1, setHora1] = useState();
   const [mostrarSelectorHora, setMostrarSelectorHora] = useState(false);
 
   const [comunaId, setComunaId] = useState('');
@@ -238,21 +243,36 @@ const Formulario = (navigation) => {
   };
   //--------------------------------------------------FECHA-----------------------------------------
   const formatearFecha = (evento, fechaSeleccionada) => {
-    const fechaActual = fechaSeleccionada || fecha;
+    if (fechaSeleccionada) {
+      setFecha(fechaSeleccionada);
+      setFecha1(fechaSeleccionada.toISOString().slice(0, 10))
+    }
+    console.log('fecha: ', fecha.toISOString().slice(0, 10))
     setMostrarSelectorFecha(false);
-    setFecha(fechaActual);
+
   };
 
   const mostrarSelectorFechaModal = () => {
     setMostrarSelectorFecha(true);
   };
-  
+
 
   //--------------------------------------------------HORA-----------------------------------------
   const formatearHora = (evento, horaSeleccionada) => {
     if (horaSeleccionada !== undefined) {
-      setHora(horaSeleccionada);
+      // Obtener las horas y los minutos de la hora seleccionada
+      const horas = horaSeleccionada.getHours();
+      const minutos = horaSeleccionada.getMinutes();
+      const hh = horaSeleccionada.getHours() + ':' + horaSeleccionada.getMinutes();
+      console.log('hh: ', hh);
+      const nuevaHora = new Date();
+      nuevaHora.setHours(horas);
+      nuevaHora.setMinutes(minutos);
+
+      setHora(nuevaHora);
+      console.log(hora);
     }
+
     setMostrarSelectorHora(false);
   };
 
@@ -280,8 +300,7 @@ const Formulario = (navigation) => {
     const cleaned = text.replace(/[^0-9]/g, '');
     setTelefonoAgresor(cleaned)
   }
-  //-----------------------------------------HORA--------------------------------------------------
-/*   const tiempo = `${hora}:${minutos}`; */
+
   //-----------------------------------------Comuna Tipo Establecimiento----------------------------------------------------
   const getEstablecimientosPorComunaYTipo = (comunaId, tipoId) => {
     const establecimientosFiltrados = dataEstablecimientos.filter(
@@ -331,7 +350,7 @@ const Formulario = (navigation) => {
           <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
         </View>
       </View>
-      
+
       <View style={styles.container}>
         <ScrollView>
           <>
@@ -365,7 +384,7 @@ const Formulario = (navigation) => {
             <View>
               <Text style={styles.subTitulo}>Fecha</Text>
               <TouchableOpacity onPress={mostrarSelectorFechaModal} style={styles.textInput}>
-                <Text>{format(fecha, 'PPP', { locale: es })}</Text>
+                <Text>{format(fecha, 'P', { locale: es })}</Text>
               </TouchableOpacity>
               {mostrarSelectorFecha && (
                 <DateTimePicker
@@ -376,32 +395,25 @@ const Formulario = (navigation) => {
                 />
               )}
             </View>
-            {/* {fecha ? (
-              <Text style={styles.campoIngresado}>Campo Ingresado</Text>
-            ) : (
-              <Text style={styles.campoObligatorio}>Campo Obligatorio</Text>
-            )} */}
-             <View>
-            <Text style={styles.subTitulo}>Hora</Text>
-            <TouchableOpacity onPress={mostrarSelectorHoraModal} style={styles.textInput}>
-            <Text>{hora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
-            </TouchableOpacity>
-            {mostrarSelectorHora && (
-              <DateTimePicker
-                value={hora}
-                mode="time"
-                is24Hour={true}
-                display="spinner"
-                onChange={formatearHora}
-              />
-            )}
-          </View>
-            {/* {hora && minutos ? (
-              <Text style={styles.campoIngresado}>Campo Ingresado</Text>
-            ) : (
-              <Text style={styles.campoObligatorio}>Campo Obligatorio</Text>
-            )}
- */}
+
+            <View>
+              <Text style={styles.subTitulo}>hora1: {hora1}</Text>
+
+              <Text style={styles.subTitulo}>Hora</Text>
+              <TouchableOpacity onPress={mostrarSelectorHoraModal} style={styles.textInput}>
+                <Text>{hora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+              </TouchableOpacity>
+              {mostrarSelectorHora && (
+                <DateTimePicker
+                  value={hora}
+                  mode="time"
+                  is24Hour={true}
+                  display="spinner"
+                  onChange={formatearHora}
+                />
+              )}
+            </View>
+            
             <Text style={styles.subTitulo}>Comuna</Text>
             <View style={styles.multiSelect}>
               <Picker
@@ -673,7 +685,7 @@ const Formulario = (navigation) => {
               <Text style={styles.campoObligatorio}>Campo Obligatorio</Text>
             )}
             <Text style={styles.opcional}>OPCIONAL TESTIGO II</Text>
-            <Text style={styles.subTitulo}>Primer Nombre (*)</Text>
+            <Text style={styles.subTitulo}>Primer Nombre</Text>
             <TextInput
               value={primerNombreTestigo2}
               onChangeText={setPrimerNombreTestigo2}
@@ -681,7 +693,7 @@ const Formulario = (navigation) => {
               maxLength={20}
               style={styles.textInput}
             />
-            <Text style={styles.subTitulo}>Segundo Nombre (*)</Text>
+            <Text style={styles.subTitulo}>Segundo Nombre</Text>
             <TextInput
               value={segundoNombreTestigo2}
               onChangeText={setSegundoNombreTestigo2}
@@ -689,7 +701,7 @@ const Formulario = (navigation) => {
               maxLength={20}
               style={styles.textInput}
             />
-            <Text style={styles.subTitulo}>Apellido Paterno (*)</Text>
+            <Text style={styles.subTitulo}>Apellido Paterno</Text>
             <TextInput
               value={primerApellidoTestigo2}
               onChangeText={setPrimerApellidoTestigo2}
@@ -697,7 +709,7 @@ const Formulario = (navigation) => {
               maxLength={20}
               style={styles.textInput}
             />
-            <Text style={styles.subTitulo}>Apellido Materno (*)</Text>
+            <Text style={styles.subTitulo}>Apellido Materno</Text>
             <TextInput
               value={segundoApellidoTestigo2}
               onChangeText={setSegundoApellidoTestigo2}
@@ -705,7 +717,7 @@ const Formulario = (navigation) => {
               maxLength={20}
               style={styles.textInput}
             />
-            <Text style={styles.subTitulo}>Rut (*)</Text>
+            <Text style={styles.subTitulo}>Rut</Text>
             <TextInput
               value={rutTestigo2}
               onChangeText={setRutTestigo2}
@@ -720,7 +732,7 @@ const Formulario = (navigation) => {
             ) : (
               <Text style={{ color: 'red', alignSelf: 'center' }}>Rut Incorrecto</Text>
             )}
-            <Text style={styles.subTitulo}>Teléfono (*)</Text>
+            <Text style={styles.subTitulo}>Teléfono</Text>
             <TextInput
               value={telefonoTestigo2}
               onChangeText={setTelefonoTestigo2}
@@ -731,18 +743,18 @@ const Formulario = (navigation) => {
             />
             <Text style={styles.categoria}>VI. DESCRIPCIÓN DEL INCIDENTE</Text>
             {/* <Text style={styles.Titulo}>Descripción de la agresión</Text> */}
-            
+
             <View>
-            <Text style={styles.subTitulo}>Descripción de la agresión (*)</Text>
-            <TextInput
-              value={descripcion}
-              onChangeText={handleChangeDescripcion}
-              placeholder="Ingrese una descripción"
-              style={styles.textInput}
-              multiline={true}
-              numberOfLines={4}
-            />
-          </View>
+              <Text style={styles.subTitulo}>Descripción de la agresión (*)</Text>
+              <TextInput
+                value={descripcion}
+                onChangeText={handleChangeDescripcion}
+                placeholder="Ingrese una descripción"
+                style={styles.textInput}
+                multiline={true}
+                numberOfLines={4}
+              />
+            </View>
             {descripcion ? (
               <Text style={styles.campoIngresado}>Campo Ingresado</Text>
             ) : (
@@ -756,13 +768,13 @@ const Formulario = (navigation) => {
                 onPress={() => datosObligatorios()} />
             </View>
           </>
-        {/* ) : (
+          {/* ) : (
           <>
             <Text style={styles.loading}>No presenta un perfil, actualizar datos</Text>
           </>
         )}
  */}
-      </ScrollView>
+        </ScrollView>
       </View>
     </View>
   )
