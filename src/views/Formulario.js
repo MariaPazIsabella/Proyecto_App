@@ -18,7 +18,7 @@ import { PrimaryButton } from './components/Button';
 const Formulario = (navigation) => {
   const [isEditing, setIsEditing] = useState(false);
 
-  /* useEffect(() => {
+   useEffect(() => {
     obtenerUid();
     cargarDatosPerfil();
   }, []); 
@@ -114,7 +114,7 @@ const Formulario = (navigation) => {
       toggleEditing();
     }
   };
-  */
+  
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
@@ -319,11 +319,15 @@ const Formulario = (navigation) => {
           source={require('../assets/logo_SS.png')}
           style={styles.logoBarra}
         />
-        <Text style={styles.tituloBarra}>Servicio de Salud - Biobio</Text>
+        <Text style={styles.tituloBarra}>INGRESAR FORMULARIO</Text>
       </View>
-      {/* <View style={styles.header}>
-        <Text style={styles.Titulo}>INGRESAR FORMULARIO</Text>
-      </View> */}
+      <View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ width: '45%', height: 3, backgroundColor: '#0f69b4' }} />
+          <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
+        </View>
+      </View>
+      
       <View style={styles.container}>
         <ScrollView>
           <>
@@ -740,10 +744,10 @@ const Formulario = (navigation) => {
             ) : (
               <Text style={styles.campoObligatorio}>Campo Obligatorio</Text>
             )}
-            <View style={styles.Buttons}>
+            <View style={styles.buttons}>
               <PrimaryButton
                 title="Guardar"
-                color="blue"
+                color="#0f69b4"
                 //onPress={() => guardarPerfil()}/>
                 onPress={() => datosObligatorios()} />
             </View>
@@ -777,7 +781,7 @@ const styles = StyleSheet.create({
     height: 70,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#394091',
+    backgroundColor: '#rgb(39, 40, 91)',
     padding: 20,
   },
   containerGeneral: {
@@ -848,7 +852,7 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     height: 45,
-    width: 330,
+    width: 300,
     alignSelf: 'center',
     fontSize: 13,
     borderRadius: 10,
@@ -862,7 +866,7 @@ const styles = StyleSheet.create({
   buttons: {
     fontSize: 12,
     height: 50,
-    marginBottom: '25%',
+    marginBottom: '35%',
     marginTop: 5,
   },
   time: {
@@ -871,7 +875,7 @@ const styles = StyleSheet.create({
   },
   multiSelect: {
     height: 45,
-    width: 330,
+    width: 300,
     alignSelf: 'center',
     borderWidth: 1,
     borderColor: 'black',

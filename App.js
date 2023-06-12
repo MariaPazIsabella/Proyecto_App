@@ -17,8 +17,8 @@ const App = () => {
     <NavigationContainer>
       <StatusBar backgroundColor="black" />
       <Stack.Navigator screenOptions={{ headerShown: Login }}>
-      {/* <Stack.Screen name="AccessForm" component={Formulario} options={{ headerShown: false }} /> */}
-       {/*  <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} /> */}
+      
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} /> 
         <Stack.Screen name="HomeUsuario" component={BottomNavigatorUsuario} options={{ headerShown: false }} /> 
         <Stack.Screen name="HomeOperador" component={BottomNavigatorOperador} options={{ headerShown: false }} />
         <Stack.Screen name="HomeAdmin" component={BottomNavigatorAdmin} options={{ headerShown: false }} />

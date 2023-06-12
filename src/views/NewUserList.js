@@ -52,18 +52,36 @@ const NewUserList = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <ScrollView>
-                <StatusBar backgroundColor="black" />
-
-                <Image style={styles.image} source={require('../assets/logo_SS.png')} />
-                <Text style={styles.Titulo}>Registre nuevo usuario</Text>
-
+        <View style={styles.containerGen}>
+            <StatusBar backgroundColor="black" />
+            <View style={styles.container}>
+                <Image
+                    source={require('../assets/logo_SS.png')}
+                    style={styles.logo}
+                />
+                <Image
+                    source={require('../assets/logo_SS.png')}
+                    style={styles.logo}
+                />
+                <Text style={styles.titulo}>Solicutud de usuarios</Text>
                 <TouchableOpacity style={styles.botonVolver} onPress={handleVolver}>
-                    <Icon name="arrow-back" size={24} color={COLORS.dark} />
+                    <Icon name="arrow-back" size={24} color={'#fff'} />
                 </TouchableOpacity>
+            </View>
 
-                <View style={styles.container}>
+            <View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ width: '45%', height: 3, backgroundColor: '#0f69b4' }} />
+                    <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
+                </View>
+            </View>
+
+
+            <ScrollView>
+
+                
+
+                <View style={styles.containerGen}>
                     {lista.map((item) => (
                         <TouchableOpacity key={item.id} onPress={() => handleCardPress(item.id)}>
                             <Card containerStyle={styles.card}>
@@ -82,11 +100,43 @@ const NewUserList = () => {
 //------------------------------------------------------------------------------------------
 const styles = StyleSheet.create({
 
-    container: {
+    containerGen: {
         flex: 1,
         backgroundColor: COLORS.light,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    container: {
+        width: 500,
+        height: 70,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#rgb(39, 40, 91)',
+        padding: 20,
+    },
+    containerSegundo: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    containerTercero: {
+        flex: 2,
+        alignItems: 'center',
+        /* justifyContent: 'center', */
+    },
+    logo: {
+        width: 50,
+        height: 50,
+        marginRight: 10,
+    },
+    titulo: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        textAlign: 'right',
+    },
+    botonVolver:{
+        marginLeft:'10%',
     },
 
     Titulo: {
@@ -102,6 +152,7 @@ const styles = StyleSheet.create({
         width: 300,
         borderRadius: 10,
         borderWidth: 2,
+        borderColor:'#0f69b4',
     },
     categoria: {
         marginTop: 15,

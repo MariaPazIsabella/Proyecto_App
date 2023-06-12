@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-elements';
 import { getDocs, collection, query, where } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
@@ -66,7 +66,7 @@ const VistaReportesUsuarios = () => {
     if (estado === 'revision') {
       return { borderColor: 'red' };
     } else if (estado === 'reportado') {
-      return { borderColor: 'blue' };
+      return { borderColor: '#0f69b4' };
     } else {
       return {};
     }
@@ -78,8 +78,20 @@ const VistaReportesUsuarios = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.light, flex: 1, marginBottom: 10 }}>
-      <View style={styles.header}>
-        <Text style={styles.Titulo}>LISTA DE REPORTES</Text>
+
+
+      <View style={styles.container}>
+        <Image
+          source={require('../assets/logo_SS.png')}
+          style={styles.logo}
+        />
+        <Text style={styles.titulo}>LISTA DE REPORTES</Text>
+      </View>
+      <View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ width: '45%', height: 3, backgroundColor: '#0f69b4' }} />
+          <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
+        </View>
       </View>
 
       <View style={styles.filtros}>
@@ -95,28 +107,28 @@ const VistaReportesUsuarios = () => {
         </TouchableOpacity>
       </View>
 
-        <ScrollView>
-          <View style={styles.container}>
-            {lista.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                onPress={() => handleCardPress(item.id)}
-              >
-                <Card containerStyle={[styles.card, getCardBorderStyle(item.estado)]}>
-                  <Card.Title>{item.estado}</Card.Title>
-                  <Card.Divider />
-                  <Text>Fecha: {item.fecha}</Text>
-                  <Text>Comuna: {item.nombreComuna}</Text>
-                </Card>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    );
-  };
+      <ScrollView>
+        <View style={styles.containerGen}>
+          {lista.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              onPress={() => handleCardPress(item.id)}
+            >
+              <Card containerStyle={[styles.card, getCardBorderStyle(item.estado)]}>
+                <Card.Title>{item.estado}</Card.Title>
+                <Card.Divider />
+                <Text>Fecha: {item.fecha}</Text>
+                <Text>Comuna: {item.nombreComuna}</Text>
+              </Card>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
 
-  
+
 const styles = StyleSheet.create({
   header: {
     paddingVertical: 20,
@@ -133,7 +145,7 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
     marginLeft: '5%',
   },
-  container: {
+  containerGen: {
     flex: 1,
     backgroundColor: COLORS.light,
     alignItems: 'center',
@@ -181,7 +193,7 @@ const styles = StyleSheet.create({
   },
   Titulo: {
     marginTop: 15,
-    color: '#1e6496',
+    color: '#0f69b4',
     textAlign: 'center',
     textDecorationLine: 'underline',
     fontWeight: 'bold',
@@ -202,10 +214,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   botonFiltro: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: '#0f69b4',
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginTop: 5,
+    borderRadius:10,
   },
   textoBoton: {
     color: COLORS.white,
@@ -225,6 +238,35 @@ const styles = StyleSheet.create({
     marginBottom: '3%',
     /* justifyContent: 'center',
     alignItems: 'center', */
+  },
+  container: {
+    width: 500,
+    height: 70,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#rgb(39, 40, 91)',
+    padding: 20,
+  },
+  containerSegundo: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  containerTercero: {
+    flex: 2,
+    alignItems: 'center',
+    /* justifyContent: 'center', */
+  },
+  logo: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+  },
+  titulo: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    textAlign: 'right',
   },
 });
 export default VistaReportesUsuarios;

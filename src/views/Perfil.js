@@ -63,53 +63,60 @@ const Perfil = (props) => {
           source={require('../assets/logo_SS.png')}
           style={styles.logo}
         />
-        <Text style={styles.tituloBarra}>Servicio de Salud - Biobio</Text>
+        <Text style={styles.tituloBarra}>PERFIL</Text>
       </View>
-      
-      <Text style={{ fontSize: 20, color: "black", fontWeight: 'bold', alignSelf: 'center', marginTop: 150 }}> 
-      Modificar datos personales</Text>
+
+      <View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ width: '45%', height: 3, backgroundColor: '#0f69b4' }} />
+          <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
+        </View>
+      </View>
+
+      <View style={styles.views}>
+        <Text style={styles.subTitulo}>Nombre: {nombreAfectado}</Text>
+        <Text style={styles.subTitulo}>Genero: {genero}</Text>
+        <Text style={styles.subTitulo}>Rut: {rut}</Text>
+        <Text style={styles.subTitulo}>Fecha nacimiento: {date}</Text>
+        <Text style={styles.subTitulo}>Edad: {edad}</Text>
+        <Text style={styles.subTitulo}>Telefono: {telefono}</Text>
+        <Text style={styles.subTitulo}>Correo: {correo}</Text>
+        <Text style={styles.subTitulo}>Domicilio: {domicilio}</Text>
+        <Text style={styles.subTitulo}>Mutual: {mutual} </Text>
+        <Text style={styles.subTitulo}>Estamento: {tipoEstamento}</Text>
+
+      </View>
+
 
       <View style={styles.Buttons}>
         <PrimaryButton
           title="Editar"
-          color="blue"
+          color="#0f69b4"
           onPress={() => props.navigation.navigate('EditarPerfil')}
         />
-      </View>     
-
-     {/*      <Text style={styles.subTitulo}>Nombre: {nombreAfectado}</Text>
-          <Text style={styles.subTitulo}>Genero: {genero}</Text>
-          <Text style={styles.subTitulo}>Rut: {rut}</Text>
-          <Text style={styles.subTitulo}>Fecha nacimiento: {date}</Text>
-          <Text style={styles.subTitulo}>Edad: {edad}</Text>
-          <Text style={styles.subTitulo}>Telefono: {telefono}</Text>
-          <Text style={styles.subTitulo}>Correo: {correo}</Text>
-          <Text style={styles.subTitulo}>Domicilio: {domicilio}</Text>
-          <Text style={styles.subTitulo}>Mutual: {mutual} </Text>
-          <Text style={styles.subTitulo}>Estamento: {estamento}: {tipoEstamento}</Text>
-    */}
+      </View>
     </ScrollView>
   )
 }
 //------------------------------------------------------------------------------------------
 const styles = StyleSheet.create({
   container: {
-   /*  paddingVertical: 20, */
+    /*  paddingVertical: 20, */
     /* paddingHorizontal: 30, */
     /* alignItems: 'center', */
   },
   containerBarra: {
     width: 500,
-    height: 150,
+    height: 70,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#rgb(39, 40, 91)',
     padding: 20,
   },
-  
+
   logo: {
-    width: 100,
-    height: 100,
+    width: 50,
+    height: 50,
     marginRight: 10,
   },
   tituloBarra: {
@@ -117,6 +124,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#ffffff',
     textAlign: 'right',
+  },
+  views: {
+    borderWidth: 2,
+    borderColor: '#0f69b4',
+    marginBottom: '2%',
+    marginTop:'5%',
+    backgroundColor: '#0f69b490',
+    borderRadius: 10,
+    width: 300,
+    marginLeft:'8%'
   },
   Titulo: {
     marginTop: 10,
@@ -128,6 +145,7 @@ const styles = StyleSheet.create({
   subTitulo: {
     flex: 1,
     marginTop: 5,
+    color:'#fff',
     height: 35,
     borderRadius: 10,
     flexDirection: 'row',

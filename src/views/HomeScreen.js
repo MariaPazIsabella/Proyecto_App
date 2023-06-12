@@ -11,18 +11,19 @@ const HomeScreen = () => {
         />
         <Text style={styles.titulo}>Servicio de Salud - Biobio</Text>
       </View>
+      <View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ width: '45%', height: 3, backgroundColor: '#0f69b4' }} />
+          <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
+        </View>
+      </View>
       <View style={styles.containerSegundo}>
         <Image 
           source={require('../assets/banner-agresiones.png')} 
           style={styles.imagenBanner}
         />
       </View>
-      <View style={{ paddingVertical: 20 }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ width: '45%', height: 3, backgroundColor: '#0f69b4' }} />
-          <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
-        </View>
-      </View>
+      
       <View style={styles.containerTercero}>
         <Text style={styles.contacto}>Información de contacto</Text>
         <Text style={styles.contactoDetalle}>Dirección</Text>
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: 500,
-    height: 150,
+    height: 70,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#rgb(39, 40, 91)',
@@ -62,8 +63,8 @@ const styles = StyleSheet.create({
     /* justifyContent: 'center', */
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 50,
+    height: 50,
     marginRight: 10,
   },
   titulo: {

@@ -214,7 +214,7 @@ const AccessForm = (props) => {
                         title="Guardar"
                         color="blue"
                         //onPress={() => subirPerfil()} />
-                        onPress={() => savePerfil()}/> 
+                        onPress={() => datosObligatorios()}/> 
                 </View>
             </View>
             </ScrollView>
@@ -241,8 +241,8 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     logoBarra: {
-        width: 100,
-        height: 100,
+        width: 50,
+        height: 50,
         marginRight: 10,
     },
     tituloBarra: {

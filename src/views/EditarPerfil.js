@@ -4,6 +4,10 @@ import { StyleSheet, Text, View, TextInput, Image, StatusBar, Button, Alert, Scr
 import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 import { FIRESTORE_DB } from '../consts/firebase';
 import { getFirestore, addDoc, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
@@ -33,6 +37,8 @@ const EditarPerfil = () => {
     const db = getFirestore();
     const profileRef = doc(db, 'UserProfiles', uid);
 
+
+
     try {
       const profileDoc = await getDoc(profileRef);
       if (profileDoc.exists()) {
@@ -41,13 +47,12 @@ const EditarPerfil = () => {
           nombreAfectado: nombre,
           genero: genero,
           rutAfectado: rutValido,
-          fechaNacimiento: date,
+          fechaNacimiento: fecha,
           edad: edad,
           telefonoAfectado: telefono,
           correo: correo,
           domicilio: domicilio,
           mutualidad: mutual,
-          estamentoAfectado: estamento,
           tipoEstamento: tipoEstamento,
         });
 
@@ -59,13 +64,12 @@ const EditarPerfil = () => {
           nombreAfectado: nombre,
           genero: genero,
           rutAfectado: rutValido,
-          fechaNacimiento: date,
+          fechaNacimiento: fecha,
           edad: edad,
           telefonoAfectado: telefono,
           correo: correo,
           domicilio: domicilio,
           mutualidad: mutual,
-          estamentoAfectado: estamento,
           tipoEstamento: tipoEstamento,
         });
 
@@ -87,7 +91,17 @@ const EditarPerfil = () => {
       }
     });
   };
-  
+
+  const formatearFecha = (evento, fechaSeleccionada) => {
+    const fechaActual = fechaSeleccionada || fecha;
+    setMostrarSelectorFecha(false);
+    setFecha(fechaActual);
+  };
+
+  const mostrarSelectorFechaModal = () => {
+    setMostrarSelectorFecha(true);
+  };
+
 
   //-----------------------------------------------------
   const navigation = useNavigation();
@@ -98,13 +112,13 @@ const EditarPerfil = () => {
   const [genero, setGenero] = useState('');
   const [rut, setRut] = useState('');
   const [rutValido, setRutValido] = useState(''); //rut valido es el que se envia, no tiene dv
-  const [date, setDate] = useState('');
+  const [fecha, setFecha] = useState('');
+  const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false);
   const [edad, setEdad] = useState('');
   const [telefono, setTelefono] = useState('');
   const [correo, setCorreo] = useState('');
   const [domicilio, setDomicilio] = useState('');
   const [mutual, setMutual] = useState('');
-  const [estamento, setEstamento] = useState('');
   const [tipoEstamento, setTipoEstamento] = useState('');
 
   //-------------------------------------------Limpiar texto-----------------------------------------------  
@@ -114,23 +128,6 @@ const EditarPerfil = () => {
   };
 
   //--------------------------------------------------FECHA-----------------------------------------
-  const formatDate = (text) => {
-    // Elimina todo lo que no sea dígito
-    const cleaned = text.replace(/[^0-9]/g, '');
-
-    // Divide en grupos de 2, 2 y 4 caracteres
-    const match = cleaned.match(/^(\d{2})(\d{2})(\d{4})$/);
-
-    if (match) {
-      // Formatea la fecha con los separadores deseados
-      const formatted = match[1] + '-' + match[2] + '-' + match[3];
-      setDate(formatted);
-      const edadCalculada = calcularEdad(formatted);
-      setEdad(edadCalculada.toString());
-    } else {
-      setDate(cleaned);
-    }
-  };
 
   function calcularEdad(fecha) {
     const partesFecha = fecha.split('-');
@@ -203,7 +200,7 @@ const EditarPerfil = () => {
   };
   //--------------------------------------------------Datos obligatorios-----------------------------------------
   const savePerfil = async () => {
-    if (!primerNombre || !segundoNombre || !primerApellido || !segundoApellido || !rutValido || !date || !telefono || !correo || !domicilio || !mutual || !estamento || !tipoEstamento) {
+    if (!primerNombre || !segundoNombre || !primerApellido || !segundoApellido || !rutValido || !fecha || !telefono || !correo || !domicilio || !mutual || !estamento || !tipoEstamento) {
       Alert.alert('Error', 'Por favor complete, todos los campos son obligatorios');
     } else {
       subirPerfil()
@@ -212,23 +209,31 @@ const EditarPerfil = () => {
 
   const handleVolver = () => {
     navigation.goBack();
-};
+  };
+  
   //------------------------------------------------------------------------------------------
   return (
-    <ScrollView >
+    <View>
       <StatusBar backgroundColor="black" />
-        <View style={styles.containerBarra}>
-          <Image
-            source={require('../assets/logo_SS.png')}
-            style={styles.logoBarra}
-          />
-          <Text style={styles.tituloBarra}>Servicio de Salud - Biobio</Text>
-        </View>
-        <Text style={{ fontSize: 23, color: "black", fontWeight: 'bold', alignSelf: 'center', marginTop: 15 }}>Datos Personales</Text>
-        
-        <TouchableOpacity onPress={handleVolver}>
-          <Icon name="arrow-back" size={27} color={COLORS.dark} />
+      <View style={styles.containerBarra}>
+        <Image
+          source={require('../assets/logo_SS.png')}
+          style={styles.logoBarra}
+        />
+        <Text style={styles.tituloBarra}>Datos Personales</Text>
+        <TouchableOpacity 
+          style={styles.volver}
+          onPress={handleVolver}>
+          <Icon name="arrow-back" size={27} color={'#fff'} />
         </TouchableOpacity>
+      </View>
+      <View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ width: '45%', height: 3, backgroundColor: '#0f69b4' }} />
+          <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
+        </View>
+      </View>
+      <ScrollView >
 
         <View style={styles.container}>
           <Text style={styles.subTitulo}>Primer Nombre (*)</Text>
@@ -291,16 +296,25 @@ const EditarPerfil = () => {
           {rutValido ? (
             <Text style={{ color: 'green', alignSelf: 'center', marginTop: 8 }}>Rut Válido</Text>
           ) : (
-            <Text style={{ color: 'red', alignSelf: 'center', marginTop: 8  }}>Rut Icorrecto</Text>
+            <Text style={{ color: 'red', alignSelf: 'center', marginTop: 8 }}>Rut Icorrecto</Text>
           )}
+          <View>
           <Text style={styles.subTitulo}>Fecha de Nacimiento (*)</Text>
-          <TextInput
-            value={date}
-            placeholder="dd mm yyyy"
-            onChangeText={formatDate}
-            maxLength={10}
-            style={styles.textInput}
-          />
+          <TouchableOpacity onPress={mostrarSelectorFechaModal} style={styles.textInput}>
+            
+              </TouchableOpacity>
+              {mostrarSelectorFecha && (
+                <DateTimePicker
+                  value={fecha}
+                  mode="date"
+                  display="default"
+                  onChange={formatearFecha}
+                />
+              )}
+          </View>
+          
+          
+
           <Text style={styles.subTitulo}>Teléfono (*) </Text>
           <TextInput
             value={telefono}
@@ -327,7 +341,7 @@ const EditarPerfil = () => {
           />
           <Text style={styles.subTitulo}>Mutual</Text>
           <View style={styles.multiSelect}>
-            <Picker 
+            <Picker
               selectedValue={mutual}
               onValueChange={(itemValue) => setMutual(itemValue)}
               style={styles.picker}
@@ -340,25 +354,9 @@ const EditarPerfil = () => {
               <Picker.Item label="Sin mutualidad" value="Sin mutualidad" />
             </Picker>
           </View>
-          <Text style={styles.subTitulo}>Estamento Funcionario</Text>
-          <View style={styles.multiSelect}>
-            <Picker
-              selectedValue={estamento}
-              onValueChange={(itemValue) => setEstamento(itemValue)}
-              style={styles.picker}
-            >
-              <Picker.Item label="Seleccione" value="" />
-              <Picker.Item label="Auxiliar" value="Auxiliar" />
-              <Picker.Item label="Administrativo" value="Administrativo" />
-              <Picker.Item label="Técnico" value="Tecnico" />
-              <Picker.Item label="Profesional" value="Profesional" />
-              <Picker.Item label="Profesional Funcionario (Méd, Q.F. Odon, B.Q)" value="Profesional Funcionario" />
-              <Picker.Item label="Directivo" value="Directivo" />
-              <Picker.Item label="Otro" value="Otro" />
-            </Picker>
-          </View>
 
-          <Text style={styles.subTitulo}>Estamento de Afectado</Text>
+
+          <Text style={styles.subTitulo}>Estamento Funcionario</Text>
           <View style={styles.multiSelect}>
             <Picker
               selectedValue={tipoEstamento}
@@ -376,22 +374,19 @@ const EditarPerfil = () => {
             </Picker>
           </View>
 
-          {/* <Text style={styles.subTitulo}>Tipo de Estamento</Text>
-          <TextInput
-            value={tipoEstamento}
-            onChangeText={setTipoEstamento}
-            placeholder="Tipo de Estamento"
-            style={styles.textInput}
-          /> */}
+
           <View style={styles.Buttons2}>
             <PrimaryButton
               title="Guardar"
               color="blue"
               //onPress={() => subirPerfil()} />
-              onPress={() => savePerfil()}/> 
+              onPress={() => savePerfil()} />
           </View>
         </View>
-    </ScrollView>
+      </ScrollView>
+
+    </View>
+
   )
 }
 
@@ -399,7 +394,7 @@ const EditarPerfil = () => {
 const styles = StyleSheet.create({
   containerBarra: {
     width: 500,
-    height: 150,
+    height: 70,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#rgb(39, 40, 91)',
@@ -409,8 +404,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   logoBarra: {
-    width: 100,
-    height: 100,
+    width: 50,
+    height: 50,
     marginRight: 10,
   },
   tituloBarra: {
@@ -421,8 +416,12 @@ const styles = StyleSheet.create({
   },
   container: {
     /* paddingVertical: 20, */
-    paddingHorizontal: 30, 
+    paddingHorizontal: 30,
     /* alignItems: 'center', */
+  },
+  volver:{
+    marginLeft:'15%'
+
   },
   Titulo: {
     marginTop: 10,
@@ -465,11 +464,11 @@ const styles = StyleSheet.create({
   Buttons2: {
     fontSize: 12,
     height: 50,
-    marginBottom: '25%',
+    marginBottom: '35%',
     marginTop: 10,
   },
   multiSelect: {
-    fontSize: 12, 
+    fontSize: 12,
     textAlign: 'center',
     height: 50,
     borderRadius: 10,

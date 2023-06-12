@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, TextInput, Image, Text, View, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, TextInput, StatusBar, Image, Text, View, TouchableOpacity } from 'react-native';
 import COLORS from '../consts/colors';
 import { Card } from 'react-native-elements';
 import { FIRESTORE_DB } from '../consts/firebase';
@@ -76,7 +76,7 @@ const VistaReportes = () => {
     if (estado === 'revision') {
       return { borderColor: 'red' };
     } else if (estado === 'reportado') {
-      return { borderColor: 'blue' };
+      return { borderColor: '#0f69b4' };
     } else {
       return {};
     }
@@ -88,9 +88,21 @@ const VistaReportes = () => {
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.light, flex: 1, marginBottom: 10 }}>
-      <View style={styles.header}>
-        <Text style={styles.Titulo}>LISTA DE REPORTES</Text>
+      <StatusBar backgroundColor="black" />
+      <View style={styles.container}>
+        <Image
+          source={require('../assets/logo_SS.png')}
+          style={styles.logo}
+        />
+        <Text style={styles.titulo}>LISTA DE REPORTES</Text>
       </View>
+      <View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ width: '45%', height: 3, backgroundColor: '#0f69b4' }} />
+          <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
+        </View>
+      </View>
+
 
       <View style={styles.filtros}>
         <TouchableOpacity style={styles.botonFiltro} onPress={handleMostrarTodos}>
@@ -118,16 +130,16 @@ const VistaReportes = () => {
       </View>
 
       <View style={styles.cantidadUsuariosContainer}>
-        <Text style={{fontWeight: 'bold', marginRight: 10, color:'red'}}>
+        <Text style={{ fontWeight: 'bold', marginRight: 10, color: 'red' }}>
           Revisión: {cantidadEnRevision}
         </Text>
-        <Text style={{fontWeight: 'bold', marginRight: 10, color:'blue'}}>
+        <Text style={{ fontWeight: 'bold', marginRight: 10, color: '#0f69b4' }}>
           Reportados: {cantidadReportados}
         </Text>
       </View>
 
       <ScrollView>
-        <View style={styles.container}>
+        <View style={styles.containerGen}>
 
 
           {lista.map((item) => (
@@ -167,7 +179,7 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
     marginLeft: '5%',
   },
-  container: {
+  containerGen: {
     flex: 1,
     backgroundColor: COLORS.light,
     alignItems: 'center',
@@ -245,11 +257,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   botonFiltro: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: '#0f69b4',
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginTop: 5,
-    borderRadius:10,
+    borderRadius: 10,
   },
   textoBoton: {
     color: COLORS.white,
@@ -270,6 +282,36 @@ const styles = StyleSheet.create({
     /* justifyContent: 'center',
     alignItems: 'center', */
   },
+  container: {
+    width: 500,
+    height: 70,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#rgb(39, 40, 91)',
+    padding: 20,
+  },
+  containerSegundo: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  containerTercero: {
+    flex: 2,
+    alignItems: 'center',
+    /* justifyContent: 'center', */
+  },
+  logo: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+  },
+  titulo: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    textAlign: 'right',
+  },
+
 });
 export default VistaReportes;
 

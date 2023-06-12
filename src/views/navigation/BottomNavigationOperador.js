@@ -25,7 +25,7 @@ function MyStackReportes(){
 }
 function MyStackUsuarios(){
   return(
-    <Stack.Navigator initialRouteName="VistaReportes">
+    <Stack.Navigator initialRouteName="VistaUsuarios">
       <Stack.Screen name='VistaUsuarios' component={VistaUsuarios}  options={{headerShown:false,}} />
       <Stack.Screen name='NewUserList' component={NewUserList} options={{headerShown:false,}}/>
       <Stack.Screen name='ShowUser' component={OperShowUser} options={{headerShown:false,}}/>

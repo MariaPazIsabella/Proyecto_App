@@ -98,15 +98,30 @@ const OperAuthorizeUser = ({ route }) => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView>
             {usuario ? (
                 <ScrollView>
                     <View>
-                        <Image style={styles.image} source={require('../../assets/logo_SS.png')} />
-                        <TouchableOpacity style={styles.botonVolver} onPress={handleVolver}>
-                            <Icon name="arrow-back" size={24} color={COLORS.dark} />
-                        </TouchableOpacity>
-                        <Text style={styles.Titulo}>Detalles del usuario</Text>
+
+                        <View style={styles.container}>
+                            <Image
+                                source={require('../../assets/logo_SS.png')}
+                                style={styles.logo}
+                            />
+                            <Text style={styles.titulo}>Detalles del usuario</Text>
+                            <TouchableOpacity style={styles.volver} onPress={handleVolver}>
+                                <Icon name="arrow-back" size={24} color={'#fff'} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View style={{ width: '45%', height: 3, backgroundColor: '#0f69b4' }} />
+                                <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
+                            </View>
+                        </View>
+                </View>
+                <View  style={styles.containerGen}>
                         <View style={styles.views}>
                             <Text style={styles.subTitulo}>
                                 Nombre: {usuario.primerNombre} {usuario.segundoNombre} {usuario.primerApellido} {usuario.segundoApellido}
@@ -114,7 +129,7 @@ const OperAuthorizeUser = ({ route }) => {
                             <Text style={styles.subTitulo}>Rut: {usuario.rut}</Text>
                             <Text style={styles.subTitulo}>Correo: {usuario.correo}</Text>
                             <Text style={styles.subTitulo}>Rol: {selectedRole}</Text>
-                            
+
                         </View>
 
                         <View style={styles.multiSelect}>
@@ -150,10 +165,42 @@ const OperAuthorizeUser = ({ route }) => {
 
 const styles = StyleSheet.create({
 
-    container: {
+    containerGen: {
         flex: 1,
         backgroundColor: COLORS.light,
         padding: 20,
+    },
+    container: {
+        width: 500,
+        height: 70,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#rgb(39, 40, 91)',
+        padding: 20,
+    },
+    containerSegundo: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    containerTercero: {
+        flex: 2,
+        alignItems: 'center',
+        /* justifyContent: 'center', */
+    },
+    logo: {
+        width: 50,
+        height: 50,
+        marginRight: 10,
+    },
+    titulo: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        textAlign: 'right',
+    },
+    volver: {
+        marginLeft: '10%',
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -182,7 +229,7 @@ const styles = StyleSheet.create({
     },
     buttonAutorizar: {
         width: '40%',
-        backgroundColor: 'blue',
+        backgroundColor: '#0f69b4',
         marginBottom: 5,
         marginTop: 5,
         borderRadius: 10,
@@ -230,9 +277,9 @@ const styles = StyleSheet.create({
     },
     views: {
         borderWidth: 2,
-        borderColor: '#0C17F7',
+        borderColor: '#0f69b4',
         marginBottom: '2%',
-        backgroundColor: '#536FED80',
+        backgroundColor: '#0f69b499',
         borderRadius: 10,
     },
 });

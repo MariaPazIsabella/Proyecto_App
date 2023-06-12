@@ -61,12 +61,12 @@ const VistaUsuarios = (props) => {
       try {
         const querySnapshot = await getDocs(collection(FIRESTORE_DB, 'UsersNotAuthorizedAccess'));
         // Contar la cantidad de usuarios
-        setCantidadSolicitudes(querySnapshot.size);        
+        setCantidadSolicitudes(querySnapshot.size);
       } catch (error) {
         // Manejar errores
       }
     };
-  
+
     getUsersNotAuthorizedAccess();
   }, []);
 
@@ -87,7 +87,7 @@ const VistaUsuarios = (props) => {
     if (role === 'usuario') {
       return { borderColor: 'black' };
     } else if (role === 'operador') {
-      return { borderColor: 'blue', borderWidth: 2, };
+      return { borderColor: '#0f69b4', borderWidth: 2, };
     } else {
       return {};
     }
@@ -95,8 +95,20 @@ const VistaUsuarios = (props) => {
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.light, flex: 1 }}>
-      <Image style={styles.image} source={require('../assets/logo_SS.png')} />
-      <Text style={styles.Titulo}>LISTA DE USUARIOS</Text>
+      <View style={styles.container}>
+        <Image
+          source={require('../assets/logo_SS.png')}
+          style={styles.logo}
+        />
+        <Text style={styles.titulo}>LISTA DE USUARIOS</Text>
+      </View>
+
+      <View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ width: '45%', height: 3, backgroundColor: '#0f69b4' }} />
+          <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
+        </View>
+      </View>
 
       <View style={styles.filtros}>
         <TouchableOpacity
@@ -121,11 +133,11 @@ const VistaUsuarios = (props) => {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.botonAdd} onPress={() => props.navigation.navigate('NewUserList')}>
-        <View style={styles.badge}>
+          <View style={styles.badge}>
             <Text style={styles.badgeText}>{cantidadSolicitudes}</Text>
           </View>
           <Icon name="person-add" size={30} color={COLORS.dark} />
-          
+
         </TouchableOpacity>
       </View>
 
@@ -142,7 +154,7 @@ const VistaUsuarios = (props) => {
       </View>
 
       <ScrollView>
-        <View style={styles.container}>
+        <View style={styles.containerGen}>
           {lista.map((item) => (
             <TouchableOpacity
               key={item.id}
@@ -186,6 +198,37 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   container: {
+    width: 500,
+    height: 70,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#rgb(39, 40, 91)',
+    padding: 20,
+  },
+  containerSegundo: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  containerTercero: {
+    flex: 2,
+    alignItems: 'center',
+    /* justifyContent: 'center', */
+  },
+  logo: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+  },
+  titulo: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    textAlign: 'right',
+  },
+
+
+  containerGen: {
     flex: 1,
     backgroundColor: COLORS.light,
     alignItems: 'center',
@@ -269,7 +312,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   botonFiltro: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: '#0f69b4',
     paddingVertical: '3%',
     paddingHorizontal: 12,
     marginTop: 15,
