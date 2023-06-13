@@ -43,7 +43,7 @@ const Formulario = (props) => {
         uid: uid,
         tipoAgresion: tipoAgresion,
         fecha: fecha.toISOString().slice(0, 10),
-        hora: '20:20',//hora
+        hora: hora.getHours()+':'+hora.getMinutes(),
         nombreComuna: nombreComuna,
         nombreTipo: nombreTipo,
         establecimientoId: establecimientoId,
@@ -56,7 +56,6 @@ const Formulario = (props) => {
         tipoEstamento: tipoEstamento,
         rutAfectado: rutAfectado,
         fechaNacimiento: fechaNacimiento,
-        edad: edad,
         domicilio: domicilio,
         telefonoAfectado: telefonoAfectado,
         correo: correo,
@@ -103,12 +102,12 @@ const Formulario = (props) => {
       const userId = user.uid; // Obtén el UID del usuario actual
       const userProfileQuery = query(collection(FIRESTORE_DB, 'UserProfiles'), where('uid', '==', userId));
       const querySnapshot = await getDocs(userProfileQuery);
+      setPerfil(true);
       querySnapshot.forEach((doc) => {
         setNombreAfectado(doc.data().nombreAfectado);
         setGenero(doc.data().genero);
         setRutAfectado(doc.data().rutAfectado);
         setFechaNacimiento(doc.data().fechaNacimiento);
-        setEdad(doc.data().edad);
         setTelefonoAfectado(doc.data().telefonoAfectado);
         setCorreo(doc.data().correo);
         setDomicilio(doc.data().domicilio);
@@ -123,28 +122,15 @@ const Formulario = (props) => {
   const toggleEditing = () => {
     setIsEditing(!isEditing);
   };
-  /* const [hora, setHora] = useState('');
-  const [minutos, setMinutos] = useState('');
-  const dataHoras = [];
-  for (let i = 0; i <= 24; i++) {
-    const formattedHour = i.toString().padStart(2, '0');
-    dataHoras.push(formattedHour);
-  }
-  const dataMinutos = [];
-  for (let i = 0; i <= 59; i++) {
-    const formattedMinute = i.toString().padStart(2, '0');
-    dataMinutos.push(formattedMinute);
-  }  */
+  
 
+  const [perfil, setPerfil] = useState(false);
   //I.	IDENTIFIQUE TIPO(S) DE AGRESIÓN(ES)
   const [tipoAgresion, setTipoAgresion] = useState('');
   //II.	ANTECEDENTES DE LA AGRESIÓN
   const [fecha, setFecha] = useState(new Date());
-  const [fecha1, setFecha1] = useState('');
-
   const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false);
   const [hora, setHora] = useState(new Date());
-  const [hora1, setHora1] = useState();
   const [mostrarSelectorHora, setMostrarSelectorHora] = useState(false);
 
   const [comunaId, setComunaId] = useState('');
@@ -245,7 +231,7 @@ const Formulario = (props) => {
   const formatearFecha = (evento, fechaSeleccionada) => {
     if (fechaSeleccionada) {
       setFecha(fechaSeleccionada);
-      setFecha1(fechaSeleccionada.toISOString().slice(0, 10))
+      //setFecha1(fechaSeleccionada.toISOString().slice(0, 10))
     }
     console.log('fecha: ', fecha.toISOString().slice(0, 10))
     setMostrarSelectorFecha(false);
@@ -259,18 +245,19 @@ const Formulario = (props) => {
 
   //--------------------------------------------------HORA-----------------------------------------
   const formatearHora = (evento, horaSeleccionada) => {
-    if (horaSeleccionada !== undefined) {
+    if (horaSeleccionada) {
       // Obtener las horas y los minutos de la hora seleccionada
       const horas = horaSeleccionada.getHours();
       const minutos = horaSeleccionada.getMinutes();
-      const hh = horaSeleccionada.getHours() + ':' + horaSeleccionada.getMinutes();
-      console.log('hh: ', hh);
+      
       const nuevaHora = new Date();
       nuevaHora.setHours(horas);
       nuevaHora.setMinutes(minutos);
 
       setHora(nuevaHora);
-      console.log(hora);
+      
+      console.log('hora ',hora.getHours(),':',hora.getMinutes());
+
     }
 
     setMostrarSelectorHora(false);
@@ -280,20 +267,6 @@ const Formulario = (props) => {
     setMostrarSelectorHora(true);
   };
 
-
-  /* const formatDate = (text) => {
-    // Elimina todo lo que no sea dígito
-    const cleaned = text.replace(/[^0-9]/g, '');
-    // Divide en grupos de 2, 2 y 4 caracteres
-    const match = cleaned.match(/^(\d{2})(\d{2})(\d{4})$/);
-    if (match) {
-      // Formatea la fecha con los separadores deseados
-      const formatted = match[1] + '-' + match[2] + '-' + match[3];
-      setFecha(formatted);
-    } else {
-      setFecha(cleaned);
-    }
-  }; */
 
   //--------------------------------------------------NUMERO-----------------------------------------
   const clearNum = (text) => {
@@ -350,7 +323,7 @@ const Formulario = (props) => {
           <View style={{ width: '55%', height: 3, backgroundColor: '#e22c2c' }} />
         </View>
       </View>
-
+      {perfil ? (
       <View style={styles.container}>
         <ScrollView>
           <>
@@ -397,8 +370,6 @@ const Formulario = (props) => {
             </View>
 
             <View>
-              <Text style={styles.subTitulo}>hora1: {hora1}</Text>
-
               <Text style={styles.subTitulo}>Hora</Text>
               <TouchableOpacity onPress={mostrarSelectorHoraModal} style={styles.textInput}>
                 <Text>{hora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
@@ -768,14 +739,15 @@ const Formulario = (props) => {
                 onPress={() => datosObligatorios()} />
             </View>
           </>
-          {/* ) : (
-          <>
-            <Text style={styles.loading}>No presenta un perfil, actualizar datos</Text>
-          </>
-        )}
- */}
+          
         </ScrollView>
       </View>
+      ) : (
+          <>
+            <Text style={styles.loading}>Actualize perfil</Text>
+          </>
+        )}
+
     </View>
   )
 }
@@ -807,7 +779,13 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 25,
   },
-
+  loading:{
+    marginTop: '20%',
+    color: '#0f69b4',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 17,
+  },
   Titulo: {
     marginTop: 5,
     color: '#1e6496',

@@ -5,7 +5,6 @@ import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -47,7 +46,7 @@ const EditarPerfil = () => {
           nombreAfectado: nombre,
           genero: genero,
           rutAfectado: rutValido,
-          fechaNacimiento: fecha,
+          fechaNacimiento: fecha.toISOString().slice(0, 10),
           telefonoAfectado: telefono,
           correo: correo,
           domicilio: domicilio,
@@ -63,7 +62,7 @@ const EditarPerfil = () => {
           nombreAfectado: nombre,
           genero: genero,
           rutAfectado: rutValido,
-          fechaNacimiento: fecha,
+          fechaNacimiento: fecha.toISOString().slice(0, 10),
           telefonoAfectado: telefono,
           correo: correo,
           domicilio: domicilio,
@@ -91,9 +90,11 @@ const EditarPerfil = () => {
   };
 
   const formatearFecha = (evento, fechaSeleccionada) => {
-    const fechaActual = fechaSeleccionada || fecha;
+    if (fechaSeleccionada) {
+      setFecha(fechaSeleccionada);
+    }
     setMostrarSelectorFecha(false);
-    setFecha(fechaActual);
+
   };
 
   const mostrarSelectorFechaModal = () => {
@@ -110,7 +111,7 @@ const EditarPerfil = () => {
   const [genero, setGenero] = useState('');
   const [rut, setRut] = useState('');
   const [rutValido, setRutValido] = useState(''); //rut valido es el que se envia, no tiene dv
-  const [fecha, setFecha] = useState('');
+  const [fecha, setFecha] = useState(new Date());
   const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false);
   const [telefono, setTelefono] = useState('');
   const [correo, setCorreo] = useState('');
@@ -124,7 +125,7 @@ const EditarPerfil = () => {
     setTexto(textoLimpio);
   };
 
-  
+
   //--------------------------------------------------NUMERO-----------------------------------------
   const clearNum = (text) => {
     const cleaned = text.replace(/[^0-9]/g, '');
@@ -172,7 +173,7 @@ const EditarPerfil = () => {
   };
   //--------------------------------------------------Datos obligatorios-----------------------------------------
   const savePerfil = async () => {
-    if (!primerNombre || !segundoNombre || !primerApellido || !segundoApellido || !rutValido || !fecha || !telefono || !correo || !domicilio || !mutual || !estamento || !tipoEstamento) {
+    if (!primerNombre || !segundoNombre || !primerApellido || !segundoApellido || !fecha || !rutValido  || !telefono || !correo || !domicilio || !mutual || !tipoEstamento) {
       Alert.alert('Error', 'Por favor complete, todos los campos son obligatorios');
     } else {
       subirPerfil()
@@ -182,7 +183,7 @@ const EditarPerfil = () => {
   const handleVolver = () => {
     navigation.goBack();
   };
-  
+
   //------------------------------------------------------------------------------------------
   return (
     <View>
@@ -193,7 +194,7 @@ const EditarPerfil = () => {
           style={styles.logoBarra}
         />
         <Text style={styles.tituloBarra}>Datos Personales</Text>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.volver}
           onPress={handleVolver}>
           <Icon name="arrow-back" size={27} color={'#fff'} />
@@ -270,22 +271,23 @@ const EditarPerfil = () => {
           ) : (
             <Text style={{ color: 'red', alignSelf: 'center', marginTop: 8 }}>Rut Icorrecto</Text>
           )}
-          <View>
-          <Text style={styles.subTitulo}>Fecha de Nacimiento (*)</Text>
-          <TouchableOpacity onPress={mostrarSelectorFechaModal} style={styles.textInput}>
-            
-              </TouchableOpacity>
-              {mostrarSelectorFecha && (
-                <DateTimePicker
-                  value={fecha}
-                  mode="date"
-                  display="default"
-                  onChange={formatearFecha}
-                />
-              )}
+
+          <View >
+            <Text style={styles.subTitulo}>Fecha nacimiento (*)</Text>
+            <TouchableOpacity onPress={mostrarSelectorFechaModal} style={styles.textInput}>
+              <Text>{format(fecha, 'P', { locale: es })}</Text>
+            </TouchableOpacity>
+            {mostrarSelectorFecha && (    
+              <DateTimePicker
+                value={fecha}
+                mode="date"
+                display="default"
+                onChange={formatearFecha}
+              />
+            )}
           </View>
-          
-          
+
+
 
           <Text style={styles.subTitulo}>Teléfono (*) </Text>
           <TextInput
@@ -391,8 +393,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     /* alignItems: 'center', */
   },
-  volver:{
-    marginLeft:'15%'
+  volver: {
+    marginLeft: '15%'
 
   },
   Titulo: {
